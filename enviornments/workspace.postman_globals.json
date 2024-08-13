@@ -1,0 +1,75 @@
+{
+	"id": "107b7c19-568f-48ba-819c-6bf9881fe191",
+	"values": [
+		{
+			"key": "gApiUrl",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "gIndex",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "gApiUtility",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "gAuthHeaderKey",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "gAuthHeaderValue",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "gUrl",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "gCreateRequestBody",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "gObject",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "gSaveRequestBody",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "gGetRequestBody",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		},
+		{
+			"key": "gDeleteRequestBody",
+			"value": "",
+			"type": "any",
+			"enabled": true
+		}
+	],
+	"name": "Globals",
+	"_postman_variable_scope": "globals",
+	"_postman_exported_at": "2024-04-10T12:57:04.612Z",
+	"_postman_exported_using": "Postman/10.24.18"
+}

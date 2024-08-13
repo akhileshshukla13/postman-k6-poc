@@ -1,0 +1,2114 @@
+{
+	"info": {
+		"_postman_id": "1b04e24d-b9be-4fbf-95d0-28d390a5f58f",
+		"name": "FT_Assignment Types_Functional",
+		"description": "<metadata> \n<testcase adoid='920292'/>\n<testcase adoid='917706'/>\n<testcase adoid='917711'/>\n<testcase adoid='920325'/>\n</metadata>",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30110535"
+	},
+	"item": [
+		{
+			"name": "New Folder",
+			"item": [
+				{
+					"name": "Initialize",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"gApiUtility\", responseBody);",
+									"",
+									"try {",
+									"   eval(pm.globals.get(\"gApiUtility\"));",
+									"}",
+									"catch(e) { }",
+									"",
+									"pm.test(\"Framework ready\", function(){",
+									"    pm.expect(typeof apiUtility).to.be.equal('object');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify response status is \" + 200, function() {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// This is the first request in the collection, clear the global variables",
+									"// used in the CRUD collection.   Do not do a clear all globals using pm.globals.clear",
+									"// because that will remove the common code global variable gCmcUtility.",
+									"",
+									"pm.globals.unset(\"gApiUtility\");",
+									"pm.globals.unset('gApiUrl');",
+									"pm.globals.unset('gAuthHeaderKey');",
+									"pm.globals.unset('gAuthHeaderValue');",
+									"pm.globals.unset('gUrl');",
+									"pm.globals.unset('gCreateRequestBody');",
+									"pm.globals.unset('gSaveRequestBody');",
+									"pm.globals.unset('gGetRequestBody');",
+									"pm.globals.unset('gObject');",
+									"pm.globals.unset('gIndex');",
+									"pm.globals.set('gIndex', 0);",
+									"",
+									"",
+									"var apiUtilityHost= \"\";",
+									"",
+									"if(!pm.environment.has(\"envApiUtilityHost\")) {",
+									"    apiUtilityHost = \"10.156.14.135:9000\"",
+									"} else {",
+									"    apiUtilityHost = pm.environment.get(\"envApiUtilityHost\");",
+									"}",
+									"",
+									"var requestUrl = \"http://\" + apiUtilityHost + \"/automation/apiUtility.js\";",
+									"",
+									"pm.globals.set(\"gApiUrl\", requestUrl);",
+									"",
+									"//console.log(pm.globals.get(\"gUrl\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "Content-Type"
+							}
+						],
+						"url": {
+							"raw": "{{gApiUrl}}",
+							"host": [
+								"{{gApiUrl}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Campus ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"// Make authorization header using basic auth or API key settings in the data file.",
+									"// If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"//console.log(pm.globals.get('gAuthHeaderKey'));",
+									"//console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gCreateRequestBody', JSON.stringify(req));",
+									"//console.log(pm.globals.get('gCreateRequestBody'));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									" ",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"// Make authorization header using basic auth or API key settings in the data file.",
+									"// If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"//console.log(pm.globals.get('gAuthHeaderKey'));",
+									"//console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gCreateRequestBody', JSON.stringify(req));",
+									"//console.log(pm.globals.get('gCreateRequestBody'));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									" ",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gCreateRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "SaveNew Overload Assignment",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									" ",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gSaveRequestBody', JSON.stringify(req));",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gSaveRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "SaveNew onload Assignment type linked to overload assignment type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									" ",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gSaveRequestBody', JSON.stringify(req));",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gSaveRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Get After SaveNew onload Assignment type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gGetRequestBody', JSON.stringify(req));",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gGetRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Save onload assignment type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"// Make authorization header using basic auth or API key settings in the data file.",
+									"// If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"//console.log(pm.globals.get('gAuthHeaderKey'));",
+									"//console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"",
+									"pm.globals.set('gSaveRequestBody', JSON.stringify(req));",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gSaveRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Create Load Validation Policy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"// Make authorization header using basic auth or API key settings in the data file.",
+									"// If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"//console.log(pm.globals.get('gAuthHeaderKey'));",
+									"//console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gCreateRequestBody', JSON.stringify(req));",
+									"//console.log(pm.globals.get('gCreateRequestBody'));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									" ",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gCreateRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "SaveNew Load Validation Policy",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"",
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									" ",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gSaveRequestBody', JSON.stringify(req));",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gSaveRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Get  onload assignment type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gGetRequestBody', JSON.stringify(req));",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gGetRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Load Rule",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"",
+									"//Make request",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"",
+									"pm.globals.set('gDeleteRequestBody', JSON.stringify(req));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gDeleteRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Load Rule",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gGetRequestBody', JSON.stringify(req));",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gGetRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete onload assignment type association check",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"",
+									"//Make request",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"",
+									"pm.globals.set('gDeleteRequestBody', JSON.stringify(req));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gDeleteRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Get overload assignment type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gGetRequestBody', JSON.stringify(req));",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gGetRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete overload assignment type Cross Validation",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"",
+									"//Make request",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"",
+									"pm.globals.set('gDeleteRequestBody', JSON.stringify(req));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gDeleteRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Get After Save onload assignment type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gGetRequestBody', JSON.stringify(req));",
+									"",
+									"",
+									"",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gGetRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete onload assignment type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"",
+									"//Make request",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"",
+									"pm.globals.set('gDeleteRequestBody', JSON.stringify(req));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gDeleteRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Get After Delete onload assignment type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"// Make request body.",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gGetRequestBody', JSON.stringify(req));",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gGetRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Delete overload assignment type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"",
+									"//Make request",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"",
+									"pm.globals.set('gDeleteRequestBody', JSON.stringify(req));"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gDeleteRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				},
+				{
+					"name": "Get After Delete overload assignment type",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"let API = data.Apis[pm.globals.get('gIndex')];",
+									"",
+									"//Make authorization header using basic auth or API key settings in the data file.",
+									"//If data file does not autornization info, use environment variable if available.",
+									"var hdr = apiUtility.makeAuthorization(API.ApiKey, API.User, API.Password, pm.environment.get('envApiKey'), pm.environment.get('envAuthUser'), pm.environment.get('envAuthPassword'));",
+									"pm.globals.set('gAuthHeaderKey', hdr.key);",
+									"pm.globals.set('gAuthHeaderValue', hdr.value);",
+									"// console.log(pm.globals.get('gAuthHeaderKey'));",
+									"// console.log(pm.globals.get('gAuthHeaderValue'));",
+									"",
+									"// Make URL",
+									"pm.globals.set('gUrl', apiUtility.makeUrl(pm.environment.get('envWebScheme'),pm.environment.get('envWebHost'), API.RequestUrl));",
+									"//console.log(pm.globals.get('gUrl'));",
+									"",
+									"// Make request body.",
+									"// Make request body.",
+									"var request = {};",
+									"apiUtility.setChainProps(API.Chain,request);",
+									"var req = apiUtility.mergeRequestBody(request,API.RequestBody);",
+									"",
+									"pm.globals.set('gGetRequestBody', JSON.stringify(req));",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Load API utility code",
+									"eval(postman.getGlobalVariable(\"gApiUtility\"));",
+									"",
+									"// Get API configuration from data file",
+									"let API = data.Apis[pm.globals.get(\"gIndex\")];",
+									"",
+									"// --- Start test verifications             ---",
+									"// --- Add your custom tests in 'test verifications' block ---",
+									"pm.test(\"Verify response status is \" + API.ResponseStatus, function() {",
+									"    pm.expect(pm.response.code).to.equal(API.ResponseStatus);",
+									"});",
+									"",
+									"pm.test(\"Verify response body matches expected response \", function() {",
+									"    var actualresponse = JSON.parse(responseBody);",
+									"    pm.expect(apiUtility.verifyResponse(API.ResponseBody, pm.response.json())).to.be.true;",
+									"});",
+									"// --- End test verification ---",
+									"",
+									"// If status is OK save properties for chaining",
+									"if (pm.response.code === 200)",
+									"{",
+									"    var rb = pm.response.json();",
+									"    if (API.ChainSource.length > 0)",
+									"    {",
+									"        let str = API.RequestId + \".response\";",
+									"        apiUtility.globalStoreWrite(str, rb);",
+									"    }",
+									"}",
+									"",
+									"// Increment the API index",
+									"pm.globals.set(\"gIndex\", Number(pm.globals.get(\"gIndex\")) + 1);",
+									"",
+									"console.log(\"--------------------------------------------------------------------------------------\");",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "{{gAuthHeaderKey}}",
+								"value": "{{gAuthHeaderValue}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{{gGetRequestBody}}"
+						},
+						"url": {
+							"raw": "{{gUrl}}",
+							"host": [
+								"{{gUrl}}"
+							]
+						},
+						"description": "CRUD create operation"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

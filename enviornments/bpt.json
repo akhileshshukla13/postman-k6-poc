@@ -1,0 +1,34 @@
+{
+	"id": "38a337dd-b158-404f-9202-ff217d9e1aa7",
+	"name": "BTP_WLAM Student API Automation Environment",
+	"values": [
+		{
+			"key": "envWebHost",
+			"value": "sisclientweb-900162.campusnexus.dev",
+			"enabled": true
+		},
+		{
+			"key": "envAuthUser",
+			"value": "automationuser@CampusNexus.Dev",
+			"enabled": true
+		},
+		{
+			"key": "envAuthPassword",
+			"value": "ZetaTitans@12",
+			"enabled": true
+		},
+		{
+			"key": "envWebScheme",
+			"value": "https",
+			"enabled": true
+		},
+		{
+			"key": "envCollection",
+			"value": "/api/faculty-workload-hr-integration/job-functions-collection",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2024-04-12T05:17:44.695Z",
+	"_postman_exported_using": "Postman/10.24.18"
+}

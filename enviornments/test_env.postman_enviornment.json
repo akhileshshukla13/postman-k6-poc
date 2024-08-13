@@ -1,0 +1,15 @@
+{
+	"id": "2214a230-2e86-41ee-9165-2217d4817b23",
+	"name": "test_env",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "https://jsonplaceholder.typicode.com/",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2024-04-08T11:08:07.115Z",
+	"_postman_exported_using": "Postman/10.24.3"
+}

@@ -1,0 +1,67 @@
+{
+	"info": {
+		"_postman_id": "952f26ab-dec6-42ca-86ad-ce336a0b95c9",
+		"name": "test_coll",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33414272"
+	},
+	"item": [
+		{
+			"name": "https://jsonplaceholder.typicode.com/comments?postId=1",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let API = data.Apis[0];",
+							"pm.globals.set('request_url', API.RequestUrl);",
+							"pm.globals.set('post_id', API.PostId);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {",
+							"    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+							"});",
+							"",
+							"let post_id = parseInt(pm.globals.get(\"post_id\"));",
+							"var responseBody = pm.response.json();",
+							"pm.test(`Check if each JSON object has postId equal to ${post_id}`, function () {",
+							"    responseBody.forEach(function (item) {",
+							"        pm.expect(item.postId).to.eql(post_id);",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/comments?postId={{post_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"comments"
+					],
+					"query": [
+						{
+							"key": "postId",
+							"value": "{{post_id}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

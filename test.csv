@@ -1,0 +1,35 @@
+{"type":"Metric","data":{"name":"vus","type":"gauge","contains":"default","thresholds":[],"submetrics":null},"metric":"vus"}
+{"metric":"vus","type":"Point","data":{"time":"2024-04-10T19:54:15.3840468+05:30","value":1,"tags":{}}}
+{"type":"Metric","data":{"name":"vus_max","type":"gauge","contains":"default","thresholds":[],"submetrics":null},"metric":"vus_max"}
+{"metric":"vus_max","type":"Point","data":{"time":"2024-04-10T19:54:15.3840468+05:30","value":1,"tags":{}}}
+{"type":"Metric","data":{"name":"http_reqs","type":"counter","contains":"default","thresholds":[],"submetrics":null},"metric":"http_reqs"}
+{"metric":"http_reqs","type":"Point","data":{"time":"2024-04-10T19:54:15.6320667+05:30","value":1,"tags":{"expected_response":"true","group":"::New Folder","method":"GET","name":"http://10.156.14.135:9000/automation/apiUtility.js","proto":"HTTP/1.1","scenario":"default","status":"200","url":"http://10.156.14.135:9000/automation/apiUtility.js"}}}
+{"type":"Metric","data":{"name":"http_req_duration","type":"trend","contains":"time","thresholds":[],"submetrics":[{"name":"http_req_duration{expected_response:true}","suffix":"expected_response:true","tags":{"expected_response":"true"}}]},"metric":"http_req_duration"}
+{"metric":"http_req_duration","type":"Point","data":{"time":"2024-04-10T19:54:15.6320667+05:30","value":1171.7466,"tags":{"expected_response":"true","group":"::New Folder","method":"GET","name":"http://10.156.14.135:9000/automation/apiUtility.js","proto":"HTTP/1.1","scenario":"default","status":"200","url":"http://10.156.14.135:9000/automation/apiUtility.js"}}}
+{"type":"Metric","data":{"name":"http_req_blocked","type":"trend","contains":"time","thresholds":[],"submetrics":null},"metric":"http_req_blocked"}
+{"metric":"http_req_blocked","type":"Point","data":{"time":"2024-04-10T19:54:15.6320667+05:30","value":0.5071,"tags":{"expected_response":"true","group":"::New Folder","method":"GET","name":"http://10.156.14.135:9000/automation/apiUtility.js","proto":"HTTP/1.1","scenario":"default","status":"200","url":"http://10.156.14.135:9000/automation/apiUtility.js"}}}
+{"type":"Metric","data":{"name":"http_req_connecting","type":"trend","contains":"time","thresholds":[],"submetrics":null},"metric":"http_req_connecting"}
+{"metric":"http_req_connecting","type":"Point","data":{"time":"2024-04-10T19:54:15.6320667+05:30","value":0,"tags":{"expected_response":"true","group":"::New Folder","method":"GET","name":"http://10.156.14.135:9000/automation/apiUtility.js","proto":"HTTP/1.1","scenario":"default","status":"200","url":"http://10.156.14.135:9000/automation/apiUtility.js"}}}
+{"type":"Metric","data":{"name":"http_req_tls_handshaking","type":"trend","contains":"time","thresholds":[],"submetrics":null},"metric":"http_req_tls_handshaking"}
+{"metric":"http_req_tls_handshaking","type":"Point","data":{"time":"2024-04-10T19:54:15.6320667+05:30","value":0,"tags":{"expected_response":"true","group":"::New Folder","method":"GET","name":"http://10.156.14.135:9000/automation/apiUtility.js","proto":"HTTP/1.1","scenario":"default","status":"200","url":"http://10.156.14.135:9000/automation/apiUtility.js"}}}
+{"type":"Metric","data":{"name":"http_req_sending","type":"trend","contains":"time","thresholds":[],"submetrics":null},"metric":"http_req_sending"}
+{"metric":"http_req_sending","type":"Point","data":{"time":"2024-04-10T19:54:15.6320667+05:30","value":3.8561,"tags":{"expected_response":"true","group":"::New Folder","method":"GET","name":"http://10.156.14.135:9000/automation/apiUtility.js","proto":"HTTP/1.1","scenario":"default","status":"200","url":"http://10.156.14.135:9000/automation/apiUtility.js"}}}
+{"type":"Metric","data":{"name":"http_req_waiting","type":"trend","contains":"time","thresholds":[],"submetrics":null},"metric":"http_req_waiting"}
+{"metric":"http_req_waiting","type":"Point","data":{"time":"2024-04-10T19:54:15.6320667+05:30","value":1096.3633,"tags":{"expected_response":"true","group":"::New Folder","method":"GET","name":"http://10.156.14.135:9000/automation/apiUtility.js","proto":"HTTP/1.1","scenario":"default","status":"200","url":"http://10.156.14.135:9000/automation/apiUtility.js"}}}
+{"type":"Metric","data":{"name":"http_req_receiving","type":"trend","contains":"time","thresholds":[],"submetrics":null},"metric":"http_req_receiving"}
+{"metric":"http_req_receiving","type":"Point","data":{"time":"2024-04-10T19:54:15.6320667+05:30","value":71.5272,"tags":{"expected_response":"true","group":"::New Folder","method":"GET","name":"http://10.156.14.135:9000/automation/apiUtility.js","proto":"HTTP/1.1","scenario":"default","status":"200","url":"http://10.156.14.135:9000/automation/apiUtility.js"}}}
+{"type":"Metric","data":{"name":"http_req_failed","type":"rate","contains":"default","thresholds":[],"submetrics":null},"metric":"http_req_failed"}
+{"metric":"http_req_failed","type":"Point","data":{"time":"2024-04-10T19:54:15.6320667+05:30","value":0,"tags":{"expected_response":"true","group":"::New Folder","method":"GET","name":"http://10.156.14.135:9000/automation/apiUtility.js","proto":"HTTP/1.1","scenario":"default","status":"200","url":"http://10.156.14.135:9000/automation/apiUtility.js"}}}
+{"type":"Metric","data":{"name":"checks","type":"rate","contains":"default","thresholds":[],"submetrics":null},"metric":"checks"}
+{"metric":"checks","type":"Point","data":{"time":"2024-04-10T19:54:15.6376398+05:30","value":0,"tags":{"check":"Framework ready","group":"::New Folder","scenario":"default"}}}
+{"metric":"checks","type":"Point","data":{"time":"2024-04-10T19:54:15.6381992+05:30","value":1,"tags":{"check":"Verify response status is 200","group":"::New Folder","scenario":"default"}}}
+{"type":"Metric","data":{"name":"group_duration","type":"trend","contains":"time","thresholds":[],"submetrics":null},"metric":"group_duration"}
+{"metric":"group_duration","type":"Point","data":{"time":"2024-04-10T19:54:15.6436607+05:30","value":1194.2684,"tags":{"group":"::New Folder","scenario":"default"}}}
+{"type":"Metric","data":{"name":"data_sent","type":"counter","contains":"data","thresholds":[],"submetrics":null},"metric":"data_sent"}
+{"metric":"data_sent","type":"Point","data":{"time":"2024-04-10T19:54:15.6436607+05:30","value":136,"tags":{"group":"","scenario":"default"}}}
+{"type":"Metric","data":{"name":"data_received","type":"counter","contains":"data","thresholds":[],"submetrics":null},"metric":"data_received"}
+{"metric":"data_received","type":"Point","data":{"time":"2024-04-10T19:54:15.6436607+05:30","value":38213,"tags":{"group":"","scenario":"default"}}}
+{"type":"Metric","data":{"name":"iteration_duration","type":"trend","contains":"time","thresholds":[],"submetrics":null},"metric":"iteration_duration"}
+{"metric":"iteration_duration","type":"Point","data":{"time":"2024-04-10T19:54:15.6436607+05:30","value":1195.2672,"tags":{"group":"","scenario":"default"}}}
+{"type":"Metric","data":{"name":"iterations","type":"counter","contains":"default","thresholds":[],"submetrics":null},"metric":"iterations"}
+{"metric":"iterations","type":"Point","data":{"time":"2024-04-10T19:54:15.6436607+05:30","value":1,"tags":{"group":"","scenario":"default"}}}

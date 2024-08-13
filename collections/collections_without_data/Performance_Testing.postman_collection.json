@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "cfb23c37-0f57-4a7c-81a6-84abddafdc40",
+		"name": "Performance_Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9637509"
+	},
+	"item": [
+		{
+			"name": "Get Crocodiles",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(crocodile => {\r",
+							"        pm.expect(crocodile).to.have.property('id');\r",
+							"        pm.expect(crocodile).to.have.property('name');\r",
+							"        pm.expect(crocodile).to.have.property('sex');\r",
+							"        pm.expect(crocodile).to.have.property('date_of_birth');\r",
+							"        pm.expect(crocodile).to.have.property('age');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Date of birth is in a valid date format\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(function(crocodile) {\r",
+							"        pm.expect(crocodile.date_of_birth).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Age is a non-negative integer\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('array');\r",
+							"    responseData.forEach(function(crocodile) {\r",
+							"        pm.expect(crocodile.age).to.be.a('number').and.to.satisfy((age) => age >= 0, \"Age should be a non-negative integer\");\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Content type is application/json\", function () {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{BASE_URL}}/public/crocodiles/",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"public",
+						"crocodiles",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Crocodile 1",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"\r",
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response has the required fields - id, name, sex, date_of_birth, and age\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData).to.have.property('id');\r",
+							"    pm.expect(responseData).to.have.property('name');\r",
+							"    pm.expect(responseData).to.have.property('sex');\r",
+							"    pm.expect(responseData).to.have.property('date_of_birth');\r",
+							"    pm.expect(responseData).to.have.property('age');\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Name is a non-empty string\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.name).to.be.a('string').and.to.have.lengthOf.at.least(1, \"Name should not be empty\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Date of birth is in a valid date format\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"    \r",
+							"    pm.expect(responseData).to.be.an('object');\r",
+							"    pm.expect(responseData.date_of_birth).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Age is a non-negative integer\", function () {\r",
+							"  const responseData = pm.response.json();\r",
+							"  \r",
+							"  pm.expect(responseData).to.be.an('object');\r",
+							"  pm.expect(responseData.age).to.be.a('number');\r",
+							"  pm.expect(responseData.age).to.satisfy((age) => age >= 0, \"Age should be a non-negative integer\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://test-api.k6.io/public/crocodiles/1/",
+					"protocol": "https",
+					"host": [
+						"test-api",
+						"k6",
+						"io"
+					],
+					"path": [
+						"public",
+						"crocodiles",
+						"1",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

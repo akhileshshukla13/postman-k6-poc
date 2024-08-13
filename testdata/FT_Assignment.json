@@ -1,0 +1,555 @@
+[
+  {
+    "Type": "CrudDataFile",
+    "Version": "1.0",
+    "TestDescription": "API CRUD tests for WorkloadManagement Commands-WlmAssignmentType",
+    "Entity": "WorkloadManagement Commands/WlmAssignmentType",
+    "Apis": [
+      {
+        "RequestId": "0cdd53f8-c063-41d1-a86f-6eaddfb93e59",
+        "RequestMethod": "GET",
+        "RequestUrl": "/ds/campusnexus/Campuses/CampusNexus.GetCampusListByStaff()?$select=Id,Name,Code,IsActive& $filter=IsActive eq 'true' format=json",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {
+          "value": []
+        },
+        "ChainSource": [
+          "response.value[0].Id"
+        ],
+        "Chain": []
+      },
+      {
+        "RequestId": "be296aab-27b2-4e2f-923c-7d06e530b512",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/create",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {
+          "payload": {
+            "data": {
+              "id": -1,
+              "campusGroupId": 0,
+              "code": null,
+              "hasPayroll": false,
+              "isActive": true,
+              "name": "",
+              "rowVersion": null,
+              "campusGroup": {
+                "id": -1,
+                "code": "N",
+                "financialCampusGroup": false,
+                "isActive": true,
+                "isSystemCode": true,
+                "name": "N",
+                "rowVersion": null,
+                "saStmtComments": null,
+                "saStmtLastCloseDate": null,
+                "type": "N",
+                "campusList": [],
+                "extendedProperties": [],
+                "entityState": 0
+              },
+              "extendedProperties": [],
+              "entityState": 0
+            }
+          },
+          "notifications": [],
+          "hasError": false,
+          "hasFault": false,
+          "hasWarning": false,
+          "hasValidationError": false,
+          "hasValidationWarning": false,
+          "hasValidationInformation": false,
+          "hasSecurityError": false
+        },
+        "ChainSource": [
+          "response.payload.data"
+        ],
+        "Chain": []
+      },
+      {
+        "RequestId": "c5a86a4d-de2c-4023-931e-88415e45008e",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/saveNew",
+        "RequestBody": {
+          "payload": {
+            "campusGroupId": -1,
+            "code": "@StringRandom",
+            "hasPayroll": true,
+            "isOverLoad": true,
+            "name": "Overload Assignment",
+            "campusGroup": {
+              "campusList": [
+                {
+                  "id": -1,
+                  "entityState": 0,
+                  "campusGroupId": -1
+                }
+              ]
+            }
+          }
+        },
+        "ResponseStatus": 200,
+        "ResponseBody": {
+          "payload": {
+            "data": {
+              "hasPayroll": true,
+              "isActive": true,
+              "name": "Overload Assignment"
+            }
+          }
+        },
+        "ChainSource": [
+          "response.payload.data.id"
+        ],
+        "Chain": [
+          {
+            "SourceApiKey": "be296aab-27b2-4e2f-923c-7d06e530b512",
+            "SourcePath": "response.payload.data",
+            "TargetPath": "request.payload"
+          },
+          {
+            "SourceApiKey": "0cdd53f8-c063-41d1-a86f-6eaddfb93e59",
+            "SourcePath": "response.value[0].Id",
+            "TargetPath": "request.payload.campusGroup.campusList[0].campusId"
+          }
+        ]
+      },
+      {
+        "RequestId": "c5a86a4d-de2c-4023-931e-88415e45009e",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/saveNew",
+        "RequestBody": {
+          "payload": {
+            "campusGroupId": -1,
+            "code": "@StringRandom",
+            "hasPayroll": true,
+            "isOverLoad": false,
+            "name": "abc123",
+            "campusGroup": {
+              "campusList": [
+                {
+                  "id": -1,
+                  "entityState": 0,
+                  "campusGroupId": -1
+                }
+              ]
+            }
+          }
+        },
+        "ResponseStatus": 200,
+        "ResponseBody": {
+          "payload": {
+            "data": {
+              "hasPayroll": true,
+              "isActive": true,
+              "name": "abc123"
+            }
+          }
+        },
+        "ChainSource": [
+          "response.payload.data.id"
+        ],
+        "Chain": [
+          {
+            "SourceApiKey": "be296aab-27b2-4e2f-923c-7d06e530b512",
+            "SourcePath": "response.payload.data",
+            "TargetPath": "request.payload"
+          },
+          {
+            "SourceApiKey": "0cdd53f8-c063-41d1-a86f-6eaddfb93e59",
+            "SourcePath": "response.value[0].Id",
+            "TargetPath": "request.payload.campusGroup.campusList[0].campusId"
+          },
+          {
+            "SourceApiKey": "c5a86a4d-de2c-4023-931e-88415e45008e",
+            "SourcePath": "response.payload.data.id",
+            "TargetPath": "request.payload.overloadAssignmentTypeId"
+          }
+        ]
+      },
+      {
+        "RequestId": "630ac30d-6393-470d-b08a-40cf3b4b4536",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/get",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {},
+        "ChainSource": [
+          "response.payload.data"
+        ],
+        "Chain": [
+          {
+            "SourceApiKey": "c5a86a4d-de2c-4023-931e-88415e45009e",
+            "SourcePath": "response.payload.data.id",
+            "TargetPath": "request.payload.id"
+          }
+        ]
+      },
+      {
+        "RequestId": "2b8c8502-fab2-4136-b253-4d87d5bc4d09",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/save",
+        "RequestBody": {
+          "payload": {
+            "name": "Onload Assignment",
+            "campusList": [
+              {
+                "entityState": 0
+              }
+            ]
+          }
+        },
+        "ResponseStatus": 200,
+        "ResponseBody": {
+          "payload": {
+            "data": {
+              "hasPayroll": true,
+              "isActive": true,
+              "name": "Onload Assignment"
+            }
+          }
+        },
+        "ChainSource": [],
+        "Chain": [
+          {
+            "SourceApiKey": "630ac30d-6393-470d-b08a-40cf3b4b4536",
+            "SourcePath": "response.payload.data",
+            "TargetPath": "request.payload"
+          }
+        ]
+      },
+      {
+        "RequestId": "a35e039e-e568-4a24-b993-a16bed594f88",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmLoadRule/Create",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {},
+        "ChainSource": [
+          "response.payload.data"
+        ],
+        "Chain": []
+      },
+      {
+        "RequestId": "a35e039e-e568-4a24-b993-a16bed594f98",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmLoadRule/SaveNew",
+        "RequestBody": {
+          "payload": {
+            "campusGroupId": -1,
+            "code": "@StringRandom",
+            "name": "Loadrule01"
+          }
+        },
+        "ResponseStatus": 200,
+        "ResponseBody": {},
+        "ChainSource": [
+          "response.payload.data.id"
+        ],
+        "Chain": [
+          {
+            "SourceApiKey": "a35e039e-e568-4a24-b993-a16bed594f88",
+            "SourcePath": "response.payload.data",
+            "TargetPath": "request.payload"
+          },
+          {
+            "SourceApiKey": "0cdd53f8-c063-41d1-a86f-6eaddfb93e59",
+            "SourcePath": "response.value[0].Id",
+            "TargetPath": "request.payload.campusGroup.campusList[0].campusId"
+          },
+          {
+            "SourceApiKey": "c5a86a4d-de2c-4023-931e-88415e45009e",
+            "SourcePath": "response.payload.data.id",
+            "TargetPath": "request.payload.wlmAssignmentTypeId"
+          }
+        ]
+      },
+      {
+        "RequestId": "a35e039e-e568-4a24-b993-a16bed594a68",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/get",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {},
+        "ChainSource": [
+          "response.payload.data"
+        ],
+        "Chain": [
+          {
+            "SourceApiKey": "c5a86a4d-de2c-4023-931e-88415e45009e",
+            "SourcePath": "response.payload.data.id",
+            "TargetPath": "request.payload.id"
+          }
+        ]
+      },
+      {
+        "RequestId": "35cbc007-cec4-4ff7-aa8d-2f78f2c364ad",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/delete",
+        "RequestBody": {},
+        "ResponseStatus": 400,
+        "ResponseBody": {
+          "payload": null,
+          "notifications": [
+            {
+              "message": "The Assignment Type cannot be deleted because it is associated with Load Validation Policy."
+            }
+          ]
+        },
+        "ChainSource": [],
+        "Chain": [
+          {
+            "SourceApiKey": "a35e039e-e568-4a24-b993-a16bed594a68",
+            "SourcePath": "response.payload.data",
+            "TargetPath": "request.payload"
+          }
+        ]
+      },
+      {
+        "RequestId": "a35e039e-e568-4a24-b993-a16bed594b68",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmLoadRule/Get",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {},
+        "ChainSource": [
+          "response.payload.data"
+        ],
+        "Chain": [
+          {
+            "SourceApiKey": "a35e039e-e568-4a24-b993-a16bed594f98",
+            "SourcePath": "response.payload.data.id",
+            "TargetPath": "request.payload.id"
+          }
+        ]
+      },
+      {
+        "RequestId": "35cbc007-cec4-4ff7-aa8d-2f78f2c364ad",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmLoadRule/delete",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {
+          "payload": {
+            "deleted": true
+          },
+          "notifications": [],
+          "hasError": false,
+          "hasFault": false,
+          "hasWarning": false,
+          "hasValidationError": false,
+          "hasValidationWarning": false,
+          "hasValidationInformation": false,
+          "hasSecurityError": false
+        },
+        "ChainSource": [],
+        "Chain": [
+          {
+            "SourceApiKey": "a35e039e-e568-4a24-b993-a16bed594b68",
+            "SourcePath": "response.payload.data",
+            "TargetPath": "request.payload"
+          }
+        ]
+      },
+      {
+        "RequestId": "a35e039e-e568-4a24-b993-a16bed594f78",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/get",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {},
+        "ChainSource": [
+          "response.payload.data"
+        ],
+        "Chain": [
+          {
+            "SourceApiKey": "c5a86a4d-de2c-4023-931e-88415e45008e",
+            "SourcePath": "response.payload.data.id",
+            "TargetPath": "request.payload.id"
+          }
+        ]
+      },
+      {
+        "RequestId": "35cbc007-cec4-4ff7-aa8d-2f78f2c36466",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/delete",
+        "RequestBody": {},
+        "ResponseStatus": 400,
+        "ResponseBody": {
+          "payload": null,
+          "notifications": [
+            {
+              "fault": null,
+              "isError": true,
+              "isFault": false,
+              "isInformation": false,
+              "isSecurity": false,
+              "isSecurityError": false,
+              "isDomain": false,
+              "isDomainError": false,
+              "isDomainWarning": false,
+              "isDomainInformation": false,
+              "isValidation": true,
+              "isValidationError": true,
+              "isValidationInformation": false,
+              "isValidationWarning": false,
+              "isWarning": false,
+              "name": null,
+              "message": "The Assignment Type cannot be deleted because it is associated  with another Assignment Type.",
+              "qualifier": null
+            }
+          ],
+          "hasError": false,
+          "hasFault": false,
+          "hasWarning": false,
+          "hasValidationError": true,
+          "hasValidationWarning": false,
+          "hasValidationInformation": false,
+          "hasSecurityError": false
+        },
+        "ChainSource": [],
+        "Chain": [
+          {
+            "SourceApiKey": "a35e039e-e568-4a24-b993-a16bed594f78",
+            "SourcePath": "response.payload.data",
+            "TargetPath": "request.payload"
+          }
+        ]
+      },
+      {
+        "RequestId": "a35e039e-e568-4a24-b993-a16bed594f68",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/get",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {},
+        "ChainSource": [
+          "response.payload.data"
+        ],
+        "Chain": [
+          {
+            "SourceApiKey": "c5a86a4d-de2c-4023-931e-88415e45009e",
+            "SourcePath": "response.payload.data.id",
+            "TargetPath": "request.payload.id"
+          }
+        ]
+      },
+      {
+        "RequestId": "35cbc007-cec4-4ff7-aa8d-2f78f2c364ad",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/delete",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {
+          "payload": {
+            "deleted": true
+          },
+          "notifications": [],
+          "hasError": false,
+          "hasFault": false,
+          "hasWarning": false,
+          "hasValidationError": false,
+          "hasValidationWarning": false,
+          "hasValidationInformation": false,
+          "hasSecurityError": false
+        },
+        "ChainSource": [],
+        "Chain": [
+          {
+            "SourceApiKey": "a35e039e-e568-4a24-b993-a16bed594f68",
+            "SourcePath": "response.payload.data",
+            "TargetPath": "request.payload"
+          }
+        ]
+      },
+      {
+        "RequestId": "f2df21ba-90d4-420c-904f-f88b59377e5f",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/get",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {
+          "payload": {
+            "data": null,
+            "count": 0
+          },
+          "notifications": [],
+          "hasError": false,
+          "hasFault": false,
+          "hasWarning": false,
+          "hasValidationError": false,
+          "hasValidationWarning": false,
+          "hasValidationInformation": false,
+          "hasSecurityError": false
+        },
+        "ChainSource": [],
+        "Chain": [
+          {
+            "SourceApiKey": "c5a86a4d-de2c-4023-931e-88415e45009e",
+            "SourcePath": "response.payload.data.id",
+            "TargetPath": "request.payload.id"
+          }
+        ]
+      },
+      {
+        "RequestId": "35cbc007-cec4-4ff7-aa8d-2f78f2c364bd",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/delete",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {
+          "payload": {
+            "deleted": true
+          },
+          "notifications": [],
+          "hasError": false,
+          "hasFault": false,
+          "hasWarning": false,
+          "hasValidationError": false,
+          "hasValidationWarning": false,
+          "hasValidationInformation": false,
+          "hasSecurityError": false
+        },
+        "ChainSource": [],
+        "Chain": [
+          {
+            "SourceApiKey": "a35e039e-e568-4a24-b993-a16bed594f78",
+            "SourcePath": "response.payload.data",
+            "TargetPath": "request.payload"
+          }
+        ]
+      },
+      {
+        "RequestId": "f2df21ba-90d4-420c-904f-f88b59377e6f",
+        "RequestMethod": "POST",
+        "RequestUrl": "/api/commands/WorkloadManagement/WlmAssignmentType/get",
+        "RequestBody": {},
+        "ResponseStatus": 200,
+        "ResponseBody": {
+          "payload": {
+            "data": null,
+            "count": 0
+          },
+          "notifications": [],
+          "hasError": false,
+          "hasFault": false,
+          "hasWarning": false,
+          "hasValidationError": false,
+          "hasValidationWarning": false,
+          "hasValidationInformation": false,
+          "hasSecurityError": false
+        },
+        "ChainSource": [],
+        "Chain": [
+          {
+            "SourceApiKey": "c5a86a4d-de2c-4023-931e-88415e45008e",
+            "SourcePath": "response.payload.data.id",
+            "TargetPath": "request.payload.id"
+          }
+        ]
+      }
+    ]
+  }
+]
